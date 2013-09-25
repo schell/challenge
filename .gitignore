@@ -1,2 +1,4 @@
 *.sw*
 .DS_Store
+code/dist
+code/dist/**
