@@ -1,4 +1,3 @@
-{-# LANGUAGE RecordWildCards #-}
 
 module Types where
 
@@ -19,13 +18,13 @@ data Player = Player { _inventory    :: Location
                      } deriving (Show, Eq)
 
 
-data World = StartWorld { _loc :: Location } 
-           | ComputerWorld { _loc :: Location } 
+data World = StartWorld { _loc :: Location }
+           | ComputerWorld { _loc :: Location }
            | RealWorld { _loc :: Location } deriving (Show, Eq)
 
 
 data Location = Location { _locDesc       :: Description
-                         , _locRadMeters  :: Double
+                         , _locRadius     :: Double
                          , _locItems      :: [Item]
                          , _locNodes      :: [Location]
                          } deriving (Show, Eq)
@@ -48,7 +47,8 @@ data Prefix = Prefix { _pfxActive  :: String -- ^ Eg. the, your
                      } deriving (Show, Eq)
 
 
-data Item = Item { _itemDesc :: Description
+data Item = Item { _itemDesc   :: Description
+                 , _itemRadius :: Double
                  } deriving (Show, Eq)
 
 

@@ -30,7 +30,7 @@ emptyGame = Game { _hasQuit = False
 
 
 emptyPlayer :: Player
-emptyPlayer = Player { _inventory = emptyLocation
+emptyPlayer = Player { _inventory = inventoryLocation
                      , _health = IntWithMax 100 100
                      , _lastLocation = Nothing
                      }
@@ -55,6 +55,7 @@ stepIO p s g
 -- | The stepping function.
 step :: Step
 step g = do
+    putStrLn ""
     g' <- case _world g of
               StartWorld{} -> do showStartScreen
                                  return $ g { _world = RealWorld yourHomeOfficeLocation

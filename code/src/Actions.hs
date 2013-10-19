@@ -16,15 +16,33 @@ runActions (PhysicalAction Look:a's) g = do
     g' <- lookWorld g
     runActions a's g'
 
-runActions (PhysicalAction (WalkTo loc):a's) g = do
-    g' <- walkToLoc loc g
+runActions (PhysicalAction (WalkTo noun):a's) g = do
+    g' <- case noun of
+              Noun loc -> walkToLoc loc g
+              Your loc -> walkToYourLoc loc g
+              Self     -> howAmINotMyself g
     runActions a's g'
 
-runActions (PhysicalAction (LookAt look):a's) g = do
-    g' <- lookAt look g
+runActions (PhysicalAction (LookAt noun):a's) g = do
+    g' <- case noun of
+              Noun n    -> lookAt n g
+              Self      -> lookAtSelf g
+              Your Self -> lookAtSelf g
+              Your n    -> lookAtYour n g
+    runActions a's g'
+
+runActions (PhysicalAction Help:a's) g = do
+    g' <- help g
     runActions a's g'
 
 runActions _ g = putStrLn "That action has not been created yet." >> return g
+
+
+help :: Step
+help g = putStrLn helpString >> return g
+    where helpString = "You are in the physical world and can " ++
+                       "look at things, walk to places and ask for help."
+
 
 
 lookAt :: String -> Step
@@ -65,7 +83,7 @@ walkToLoc loc g = do
     case w of
         RealWorld{_loc = curLoc} ->
             case locateLocation loc curLoc  of
-                Just location' -> do let d = _locRadMeters curLoc * 2
+                Just location' -> do let d = _locRadius curLoc * 2
                                      putStrLn $ "You walk "++ show d ++" meters."
                                      return $ g { _world = RealWorld location'
                                                 , _time = addSeconds (floor d) $ _time g
@@ -74,6 +92,10 @@ walkToLoc loc g = do
                                      return g
         _                  -> return g
 
+walkToYourLoc :: String -> Step
+walkToYourLoc loc g = do
+    let w = _world g  
+
 
 locateLocation :: String -> Location -> Maybe Location
 locateLocation name loc =
@@ -81,6 +103,9 @@ locateLocation name loc =
         []  -> Nothing
         l:_ -> Just l
 
+
+locateLocationFromGame :: String -> Game -> Maybe Location
+locateLocationFromGame 
 
 quitWorld :: Step
 quitWorld g = return $ g { _hasQuit = True }

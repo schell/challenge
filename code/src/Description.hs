@@ -74,8 +74,8 @@ instance Describable Location where
         concat [ h1Desc desc
                , _descLong desc
                , "\n"
-               , show (pi * (_locRadMeters ** 2))
-               , " meters^2 in area.\n"
+               , show ((4.0/3.0) * pi * (_locRadius ** 3))
+               , " meters^3 in volume\n"
                , "There "
                , pluralize _locNodes [ "is no place"
                                      , "is one place"

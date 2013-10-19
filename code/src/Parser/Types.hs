@@ -4,5 +4,7 @@ data Action = ComputerAction ComputerVerb | PhysicalAction PhysicalVerb | Unknow
 
 data ComputerVerb = HelpCmd | LogoutCmd deriving (Show, Eq)
 
-data PhysicalVerb = Help | Look | LookAt String | WalkTo String deriving (Show, Eq)
+data PhysicalVerb = Help | Look | LookAt Noun | WalkTo Noun deriving (Show, Eq)
+
+data Noun = Self | Your Noun | Noun String deriving (Show, Eq)
 

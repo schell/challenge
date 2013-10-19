@@ -4,7 +4,7 @@ import Types
 
 
 computerItem :: Item
-computerItem = 
+computerItem =
     Item { _itemDesc = Description { _descTitle = "Green Screen Computer"
                                    , _descName  = "computer"
                                    , _descShort = "an old computer"
@@ -17,4 +17,5 @@ computerItem =
                                                          , _pfxPassive = "a"
                                                          }
                                    }
+         , _itemRadius = 0.1
          }

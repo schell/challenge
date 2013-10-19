@@ -1,6 +1,7 @@
 module Locations where
 
 import           Types
+import           Items
 import qualified Data.Map as M
 
 
@@ -8,7 +9,7 @@ emptyLocation :: Location
 emptyLocation =
     Location { _locNodes = []
              , _locItems = []
-             , _locRadMeters = 0
+             , _locRadius = 0
              , _locDesc = Description { _descTitle = "The Abyss"
                                       , _descName  = "abyss"
                                       , _descShort = "an infinite abyss"
@@ -23,10 +24,30 @@ emptyLocation =
              }
 
 
+inventoryLocation :: Location
+inventoryLocation = Location { _locDesc = inventoryDescription
+                             , _locRadius = 0.5
+                             , _locItems = []
+                             , _locNodes = []
+                             }
+
+
+inventoryDescription :: Description
+inventoryDescription = Description { _descTitle = "Inventory"
+                                   , _descName = "inventory"
+                                   , _descShort = "a large backpack you use as an off-hand inventory"
+                                   , _descLong = "You acquired this backpack as a gift from your grandfather, whom it was issued to during World War II. It's about a half meter in volume and very rugged."
+                                   , _descPfx =
+                                       Prefix { _pfxActive = "the"
+                                              , _pfxPassive = "an"
+                                              }
+                                   }
+
+
 aHomeOfficeLocation :: Location
 aHomeOfficeLocation =
     Location { _locDesc = aHomeOfficeDescription
-             , _locRadMeters = 1.5
+             , _locRadius = 1.5
              , _locNodes = []
              , _locItems = []
              }
@@ -45,13 +66,19 @@ aHomeOfficeDescription = Description { _descTitle = "Home Office"
 
 
 yourHomeOfficeLocation :: Location
-yourHomeOfficeLocation = aHomeOfficeLocation { _locDesc = yourHomeOfficeDescription }
+yourHomeOfficeLocation = aHomeOfficeLocation { _locDesc = yourHomeOfficeDescription
+                                             , _locItems = yourHomeOfficeItems
+                                             }
 
 
 yourHomeOfficeDescription :: Description
 yourHomeOfficeDescription = aHomeOfficeDescription { _descTitle = "Your Home Office"
                                                    , _descLong  = "The room in your house where you do your work."
                                                    }
+
+
+yourHomeOfficeItems :: [Item]
+yourHomeOfficeItems = [ computerItem ]
 
 
 homeOfficeNodes :: M.Map String Location

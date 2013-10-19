@@ -77,8 +77,8 @@ verbLookAt = do
     string "look "
     skipOptionalWord "at"
     skipOptionalWord "the"
-    lookId <- Data.Attoparsec.Text.takeWhile (not . isSpace)
-    return $ LookAt $ T.unpack lookId
+    n <- noun
+    return $ LookAt n
 
 
 verbWalkTo :: Parser PhysicalVerb
@@ -86,8 +86,8 @@ verbWalkTo = do
     string "walk "
     skipOptionalWord "to"
     skipOptionalWord "the"
-    locId <- Data.Attoparsec.Text.takeWhile (not . isSpace)
-    return $ WalkTo $ T.unpack locId
+    n <- noun
+    return $ WalkTo n
 
 skipOptionalWord :: T.Text -> Parser ()
 skipOptionalWord s = do
@@ -95,4 +95,22 @@ skipOptionalWord s = do
     optional $ string s
     optional $ skipWhile isSpace
     return ()
+
+
+noun :: Parser Noun
+noun =
+    yourNoun <|>
+    selfNoun <|>
+    Noun . T.unpack <$> Data.Attoparsec.Text.takeWhile (not . isSpace)
+
+selfNoun :: Parser Noun
+selfNoun = do
+    string "self" <|> string "myself"
+    return Self
+
+yourNoun :: Parser Noun
+yourNoun = do
+    string "your"
+    n <- noun
+    return $ Your n
 
